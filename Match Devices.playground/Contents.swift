@@ -5,19 +5,23 @@ import PlaygroundSupport
 
 class InitialViewController: UIViewController{
     
-    var playButton = UIButton()
-    var imageLogo = UIImageView()
-    var tutorialButton = UIButton()
     var gameTitle = UIImageView()
+    var imageLogo = UIImageView()
+
+    var playButton = UIButton()
+    var tutorialButton = UIButton()
+    
 
     override func viewDidLoad() {
+        
+
         view.backgroundColor = .white
-       
+
+        setupGameTitle()
+        setupImageLogo()
         setupPlayButton()
         setupTutorialButton()
-        setupImageLogo()
-        setupGameTitle()
-        
+
         view.addSubview(gameTitle)
         view.addSubview(imageLogo)
         view.addSubview(tutorialButton)
@@ -39,18 +43,18 @@ class InitialViewController: UIViewController{
         gameTitle.frame = CGRect(x: 75, y: 45, width: 250, height: 60)
         gameTitle.image = UIImage(named: "titlePuzzle")
     }
-    
+
     func setupImageLogo(){
         imageLogo.image = UIImage(named: "logo.png")
         imageLogo.frame = CGRect(x: 90, y: 140, width: 220, height: 220)
     }
-    
+
     func setupPlayButton(){
         playButton.frame = CGRect(x: 145, y: 400, width: 110, height: 50)
         playButton.setImage(UIImage(named: "buttonPlay"), for: .normal)
         playButton.addTarget(self, action: #selector(playButtonPressed), for: .touchUpInside)
     }
-    
+
     func setupTutorialButton(){
         tutorialButton.frame = CGRect(x: 130, y: 470, width: 140, height: 55)
         tutorialButton.setImage(UIImage(named: "buttonTutorial"), for: .normal)

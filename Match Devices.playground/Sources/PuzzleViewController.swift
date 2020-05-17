@@ -7,7 +7,8 @@ public class PuzzleViewController : UIViewController{
     public var board: UICollectionView?
     public var reuseIdentifier = "CardCell"
     public var cardsArray = [Card]()
-    public var model = CardModel()
+    public var cellModel = CardCollectionViewCell()
+    public var cardModel = CardModel()
     public var firstSelectedCardIndex:IndexPath?
     public var secondSelectedCardIndex:IndexPath?
     
@@ -28,59 +29,71 @@ public class PuzzleViewController : UIViewController{
         board = UICollectionView(frame: CGRect(x: 50, y: 90, width: 300, height: 293), collectionViewLayout: layout)
         
         // cards configuration to be displayed in collection view cells
-        cardsArray = model.generateArray()
+        cardsArray = cardModel.generateArray()
 
+        setupNavigationBar()
         setupCollectionView()
         setupCheckButton()
         setupResetButton()
         setupFeedbackText()
-        setupNavigationBar()
         
         view.addSubview(board ?? UICollectionView())
+        view.addSubview(feedbackText)
         view.addSubview(checkButton)
         view.addSubview(resetButton)
-        view.addSubview(feedbackText)
         
     }
     
     // MARK: UIKit components configuration
+    
     public func setupNavigationBar(){
-        // center (title)
         let imageView = UIImageView(image: UIImage(named: "titlePuzzle"))
         imageView.contentMode = UIView.ContentMode.scaleAspectFit
+        
         let titleView = UIView(frame: CGRect(x: 0, y: 0, width: 170, height: 40))
             imageView.frame = titleView.bounds
             titleView.addSubview(imageView)
 
+        // sets image view with puzzle title in navigation bar center
         self.navigationItem.titleView = titleView
     }
     
     public func setupCollectionView(){
         board?.delegate = self
         board?.dataSource = self
-        board?.allowsMultipleSelection = true
+        
+        //register cell
         board?.register(CardCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        board?.backgroundColor = .white
-        board?.layer.borderWidth = 2.0
-        board?.layer.borderColor = UIColor.white.cgColor
-        board?.layer.cornerRadius = 5.0
+        setupBoardAppearance(board: board!)
+        
+        board?.allowsMultipleSelection = true
+    }
+    
+    public func setupBoardAppearance(board: UICollectionView){
+        board.backgroundColor = .white
+        board.layer.borderWidth = 2.0
+        board.layer.borderColor = UIColor.white.cgColor
+        board.layer.cornerRadius = 5.0
     }
     
     public func setupFeedbackText(){
+        // text appearance
+        feedbackText.frame = CGRect(x: 50, y: 385, width: 300, height: 65)
         feedbackText.alpha = 0
+        
+        // text
         feedbackText.font = UIFont.boldSystemFont(ofSize: 16)
         feedbackText.textColor = .black
         feedbackText.textAlignment = .center
-        feedbackText.isScrollEnabled = false
+        
+        feedbackText.isScrollEnabled = false                
         feedbackText.isEditable = false
-        feedbackText.frame = CGRect(x: 50, y: 385, width: 300, height: 65)
     }
-    
+            
     public func setupCheckButton(){
         checkButton.frame = CGRect(x: 140, y: 420, width: 120, height: 50)
         checkButton.setImage(UIImage(named: "buttonCheck"), for: .normal)
         checkButton.addTarget(self, action: #selector(checkButtonPressed), for: .touchUpInside)
-        
     }
     
     public func setupResetButton(){
@@ -107,7 +120,7 @@ public class PuzzleViewController : UIViewController{
     // if user has selected two cards, swap positions
     public func swapPositions(){
         // method from CardModel Class to swap card properties
-        model.swapCardsPosition(cardsArray: cardsArray, firstIndex: firstSelectedCardIndex, secondIndex: secondSelectedCardIndex)
+        cellModel.swapCardsPosition(cardsArray: cardsArray, firstIndex: firstSelectedCardIndex, secondIndex: secondSelectedCardIndex)
         
         // update statuses
         board?.reloadItems(at: [firstSelectedCardIndex!, secondSelectedCardIndex!])
@@ -121,7 +134,7 @@ public class PuzzleViewController : UIViewController{
     // resets the whole game: new board and scores
     @objc func resetButtonPressed(_ sender: UIButton){
         cardsArray.removeAll()
-        cardsArray = model.generateArray()
+        cardsArray = cardModel.generateArray()
         board?.reloadData()
         feedbackText.alpha = 0
         resetButton.setTitle("Reset board", for: .normal)
@@ -132,13 +145,13 @@ public class PuzzleViewController : UIViewController{
     
     @objc func checkButtonPressed(_ sender: UIButton){
         // check rows for same color
-        let row = model.checkAllRows(cardsArray: cardsArray)
+        let row = cellModel.checkAllRows(cardsArray: cardsArray)
         
         // check columns for same color
-        let col = model.checkAllColumns(cardsArray: cardsArray)
+        let col = cellModel.checkAllColumns(cardsArray: cardsArray)
 
         // check corners for different devices
-        let group = model.checkAllCorners(cardsArray: cardsArray)
+        let group = cellModel.checkAllCorners(cardsArray: cardsArray)
         
         // feedback
         giveFeedback(row: row, col: col, group: group)
@@ -197,6 +210,7 @@ extension PuzzleViewController: UICollectionViewDataSource{
         cell.backgroundColor = .systemBlue
         cell.layer.borderWidth = 0.2
         cell.layer.cornerRadius = 5.0
+        
         return cell
     }
     
