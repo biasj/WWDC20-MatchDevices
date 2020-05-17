@@ -3,28 +3,30 @@ import UIKit
 // This is where the puzzle happens
 public class PuzzleViewController : UIViewController{
     
-    // board and cells related
-    public var board: UICollectionView?
+    // puzzle view setup
+    var puzzleView: PuzzleView! { return self.view as? PuzzleView }
+    var board: UICollectionView! { return puzzleView.board }
+    var feedbackText: UITextView! { return puzzleView.feedbackText }
+    var checkButton: UIButton! { return puzzleView.checkButton }
+    var resetButton: UIButton! { return puzzleView.resetButton }
+
     public var reuseIdentifier = "CardCell"
+    
     public var cardsArray = [Card]()
     public var cellModel = CardCollectionViewCell()
     public var cardModel = CardModel()
+    
     public var firstSelectedCardIndex:IndexPath?
     public var secondSelectedCardIndex:IndexPath?
     
     // counts how many times cards have been swapped
     public var cardSwapped = 0
-     
-    public var feedbackText = UITextView()
-    public var resetButton = UIButton()
-    public var checkButton = UIButton()
     
     public override func viewDidLoad() {
-        view.backgroundColor = .white
         
-        let layout:UICollectionViewLayout = UICollectionViewFlowLayout()
-
-        board = UICollectionView(frame: CGRect(x: 50, y: 90, width: 300, height: 293), collectionViewLayout: layout)
+        self.view = PuzzleView()
+        self.checkButton.addTarget(self, action: #selector(checkButtonPressed), for: .touchUpInside)
+        self.resetButton.addTarget(self, action: #selector(resetButtonPressed), for: .touchUpInside)
         
         // cards configuration to be displayed in collection view cells
         cardsArray = cardModel.generateArray()
@@ -32,15 +34,6 @@ public class PuzzleViewController : UIViewController{
         setupNavigationBar()
         
         setupCollectionView()
-        setupCheckButton()
-        setupResetButton()
-        setupFeedbackText()
-        
-        view.addSubview(board ?? UICollectionView())
-        view.addSubview(feedbackText)
-        view.addSubview(checkButton)
-        view.addSubview(resetButton)
-        
     }
     
     // MARK: UIKit components configuration
@@ -63,42 +56,8 @@ public class PuzzleViewController : UIViewController{
         
         //register cell
         board?.register(CardCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
-        setupBoardAppearance(board: board!)
         
         board?.allowsMultipleSelection = true
-    }
-    
-    public func setupBoardAppearance(board: UICollectionView){
-        board.backgroundColor = .white
-        board.layer.borderWidth = 2.0
-        board.layer.borderColor = UIColor.white.cgColor
-        board.layer.cornerRadius = 5.0
-    }
-    
-    public func setupFeedbackText(){
-        // text appearance
-        feedbackText.frame = CGRect(x: 50, y: 385, width: 300, height: 65)
-        feedbackText.alpha = 0
-        
-        // text
-        feedbackText.font = UIFont.boldSystemFont(ofSize: 16)
-        feedbackText.textColor = .black
-        feedbackText.textAlignment = .center
-        
-        feedbackText.isScrollEnabled = false                
-        feedbackText.isEditable = false
-    }
-            
-    public func setupCheckButton(){
-        checkButton.frame = CGRect(x: 140, y: 420, width: 120, height: 50)
-        checkButton.setImage(UIImage(named: "buttonCheck"), for: .normal)
-        checkButton.addTarget(self, action: #selector(checkButtonPressed), for: .touchUpInside)
-    }
-    
-    public func setupResetButton(){
-        resetButton.frame = CGRect(x: 125, y: 490, width: 150, height: 50)
-        resetButton.setImage(UIImage(named: "buttonNewBoard"), for: .normal)
-        resetButton.addTarget(self, action: #selector(resetButtonPressed), for: .touchUpInside)
     }
     
     // MARK: Puzzle action
@@ -115,7 +74,7 @@ public class PuzzleViewController : UIViewController{
             swapPositions()
         }
     }
-    
+        
     // if user has selected two cards, swap positions
     public func swapPositions(){
         // method from CardModel Class to swap card properties
@@ -130,6 +89,7 @@ public class PuzzleViewController : UIViewController{
         cardSwapped += 1
     }
     
+        
     // resets the whole game: new board and scores
     @objc func resetButtonPressed(_ sender: UIButton){
         cardsArray.removeAll()
@@ -141,7 +101,7 @@ public class PuzzleViewController : UIViewController{
         resetButton.frame = CGRect(x: 125, y: 490, width: 150, height: 50)
         cardSwapped = 0
     }
-    
+        
     @objc func checkButtonPressed(_ sender: UIButton){
         // check rows for same color
         let row = cellModel.checkAllRows(cardsArray: cardsArray)
@@ -160,7 +120,7 @@ public class PuzzleViewController : UIViewController{
         resetButton.frame = CGRect(x: 125, y: 520, width: 150, height: 50)
         feedbackText.alpha = 1
     }
-    
+        
     public func giveFeedback(row: Bool, col: Bool, group: Bool){
         let badFeedback = "Hmmm... There must be a device repeating somewhere, keep playing"
         let goodFeeback = "Congratulations!! You grouped all colors with \(cardSwapped) swaps!"
