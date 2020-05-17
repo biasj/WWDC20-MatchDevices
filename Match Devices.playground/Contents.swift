@@ -5,6 +5,7 @@ import PlaygroundSupport
 
 class InitialViewController: UIViewController{
     
+    // initial view setup
     var initialView: InitialView! { return self.view as? InitialView }
     var playButton: UIButton! { return initialView.playButton }
     var tutorialButton: UIButton! { return initialView.tutorialButton }
@@ -16,9 +17,9 @@ class InitialViewController: UIViewController{
     override func viewDidLoad() {
     
         view.backgroundColor = .white
+        
         self.playButton.addTarget(self, action: #selector(playButtonPressed), for: .touchUpInside)
         self.tutorialButton.addTarget(self, action: #selector(tutorialButtonPressed), for: .touchUpInside)
-
     }
     
     // hide navigationController only on initial view controller
@@ -29,6 +30,7 @@ class InitialViewController: UIViewController{
     override func viewDidDisappear(_ animated: Bool) {
         self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
+    
     
     // MARK: Buttons actions inside first view controller
     @objc func playButtonPressed(_ sender: UIButton){

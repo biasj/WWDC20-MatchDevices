@@ -2,6 +2,7 @@ import UIKit
 
 public class InitialView: UIView{
     
+    // initial view components
     public var gameTitle = UIImageView()
     public var imageLogo = UIImageView()
     public var playButton = UIButton()
@@ -21,7 +22,6 @@ public class InitialView: UIView{
         addSubview(imageLogo)
         addSubview(playButton)
         addSubview(tutorialButton)
-        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -41,19 +41,16 @@ public class InitialView: UIView{
         imageLogo.frame = CGRect(x: 90, y: 140, width: 220, height: 220)
     }
     
-    
-    // uibutton for play button
+    // button setup for play button
     public func setupPlayButton(){
         playButton.frame = CGRect(x: 145, y: 400, width: 110, height: 50)
         playButton.setImage(UIImage(named: "buttonPlay"), for: .normal)
-//        playButton.addTarget(self, action: #selector(playButtonPressed), for: .touchUpInside)
     }
 
-    // uibutton for tutorial button
+    // button setup for tutorial button
     public func setupTutorialButton(){
         tutorialButton.frame = CGRect(x: 130, y: 470, width: 140, height: 55)
         tutorialButton.setImage(UIImage(named: "buttonTutorial"), for: .normal)
-//        tutorialButton.addTarget(self, action: #selector(tutorialButtonPressed), for: .touchUpInside)
     }
     
 }

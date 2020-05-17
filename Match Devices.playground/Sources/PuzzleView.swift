@@ -2,6 +2,7 @@ import UIKit
 
 public class PuzzleView: UIView{
     
+    // puzzle view components
     public var board: UICollectionView?    
     public var feedbackText = UITextView()
     public var checkButton = UIButton()

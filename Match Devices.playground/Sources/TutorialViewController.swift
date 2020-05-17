@@ -9,8 +9,8 @@ public class TutorialViewController: UIViewController{
     
     }
     
+    // custom title for navigation bar
     public func setupNavigationBar(){
-        
         let imageView = UIImageView(image: UIImage(named: "titleTutorial"))
         imageView.contentMode = UIView.ContentMode.scaleAspectFit
         

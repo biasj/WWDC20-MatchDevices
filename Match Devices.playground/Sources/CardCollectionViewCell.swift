@@ -4,7 +4,8 @@ public class CardCollectionViewCell: UICollectionViewCell {
     
     public var cardImage = UIImageView()
     public var highlightedView = UIImageView()
-     //instância da classe Card, que tem como propriedade o nome da imagem e uma propriedade que indica se está selecionada
+    
+    // indicates that variable cards is an instance of class Card, with imageName, color, deviceType and isSelected properties
     public var card:Card?
     
     override init(frame: CGRect){
@@ -12,6 +13,7 @@ public class CardCollectionViewCell: UICollectionViewCell {
         
         setupCardImage()
         setupHighlightedImage()
+        
         addSubview(cardImage)
         addSubview(highlightedView)
     }
@@ -33,22 +35,8 @@ public class CardCollectionViewCell: UICollectionViewCell {
             highlightedView.isHidden = !isSelected
         }
     }
-        
-    // sets card images
-    public func setCard(_ card:Card) {
-        self.card = card
-        cardImage.image = UIImage(named: card.imageName)
-    }
     
-   
-    public func setupCardImage(){
-        cardImage.clipsToBounds = true
-        cardImage.translatesAutoresizingMaskIntoConstraints = false
-        cardImage.heightAnchor.constraint(equalToConstant: 67).isActive = true
-        cardImage.widthAnchor.constraint(equalToConstant: 67).isActive = true
-        cardImage.layer.cornerRadius = 5
-    }
-    
+    // hidden imageView to indicate highlighted cell when selected
     public func setupHighlightedImage(){
         highlightedView.isHidden = true
         highlightedView.alpha = 0.5
@@ -59,10 +47,26 @@ public class CardCollectionViewCell: UICollectionViewCell {
         highlightedView.widthAnchor.constraint(equalToConstant: 67).isActive = true
         highlightedView.layer.cornerRadius = 5
     }
+        
+    // imageview that displays card image setup
+    public func setupCardImage(){
+        cardImage.clipsToBounds = true
+        cardImage.translatesAutoresizingMaskIntoConstraints = false
+        cardImage.heightAnchor.constraint(equalToConstant: 67).isActive = true
+        cardImage.widthAnchor.constraint(equalToConstant: 67).isActive = true
+        cardImage.layer.cornerRadius = 5
+    }
+    
+    
+    // sets card image
+    public func setCard(_ card:Card) {
+        self.card = card
+        cardImage.image = UIImage(named: card.imageName)
+    }
     
     // swap card properties in cell touched
     public func swapCardsPosition(cardsArray: [Card], firstIndex: IndexPath?, secondIndex: IndexPath?){
-        // conteúdo do card a ser trocado
+        // cards properties to be swapped
         let tempCardImageName = cardsArray[firstIndex!.row].imageName
         let tempCardDeviceType = cardsArray[firstIndex!.row].deviceType
         let tempCardColor = cardsArray[firstIndex!.row].color
@@ -145,7 +149,7 @@ public class CardCollectionViewCell: UICollectionViewCell {
     }
     
     // check a corner of the board for different colors
-    public func checkCorner(cardsArray: [Card], firstPosition: Int) -> Bool{
+    public func checkQuarter(cardsArray: [Card], firstPosition: Int) -> Bool{
         var clear = true
         // a corner is composed by 4 cells, two on top of another two, in a corner of the board
         let secondPosition = firstPosition+1
@@ -170,12 +174,12 @@ public class CardCollectionViewCell: UICollectionViewCell {
     }
     
     // check all corner of the board for different colors
-    public func checkAllCorners(cardsArray: [Card]) -> Bool{
+    public func checkAllQuarters(cardsArray: [Card]) -> Bool{
         var clear = true
         let firstPositions = [0,2,8,10]
         
         for i in 0...3{
-            clear = checkCorner(cardsArray: cardsArray, firstPosition: firstPositions[i])
+            clear = checkQuarter(cardsArray: cardsArray, firstPosition: firstPositions[i])
             if !clear{
                 break
             }
