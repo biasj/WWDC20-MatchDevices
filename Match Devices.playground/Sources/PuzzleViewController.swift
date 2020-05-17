@@ -19,8 +19,6 @@ public class PuzzleViewController : UIViewController{
     public var resetButton = UIButton()
     public var checkButton = UIButton()
     
-   
-    
     public override func viewDidLoad() {
         view.backgroundColor = .white
         
@@ -32,6 +30,7 @@ public class PuzzleViewController : UIViewController{
         cardsArray = cardModel.generateArray()
 
         setupNavigationBar()
+        
         setupCollectionView()
         setupCheckButton()
         setupResetButton()
