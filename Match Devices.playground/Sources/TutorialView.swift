@@ -34,7 +34,7 @@ public class TutorialView: UIView{
     
     // text view for tutorial text setup
     public func setupTutorialText(){
-          tutorialText.text = "  This is an inspired sudoku puzzle, one of my greatest passions!\n   To solve this puzzle, you must group the cards by colors in each quarter of the board.\n     It doesn't matter in which quarter you're going to group a color, but you can't repeat any devices in any rows or columns.\n   To swap cards all you need to do is select the two you want to swap! Do you think you can beat my 10 swaps record?"
+          tutorialText.text = "  This is a puzzle inspired by sudoku, one of my greatest passions!\n   To solve this puzzle, you must group the cards by colors in each quarter of the board.\n     It doesn't matter in which quarter you're going to group a color, but you can't repeat any devices in any rows or columns.\n   To swap cards all you need to do is select the two you want to swap! Do you think you can beat my 10 swaps record?"
           tutorialText.textAlignment = .justified
           tutorialText.font = UIFont.systemFont(ofSize: 16)
           tutorialText.frame = CGRect(x: 10, y: 350, width: 380, height: 300)
